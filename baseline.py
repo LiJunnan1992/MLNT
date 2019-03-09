@@ -38,7 +38,7 @@ torch.cuda.manual_seed_all(args.seed)
 use_cuda = torch.cuda.is_available()
 def save_checkpoint(state, filename='checkpoint.pth.tar'):
     torch.save(state, filename)
-    
+  
 # Training
 def train(epoch):
     net.train()
@@ -129,6 +129,7 @@ def test():
     test_acc = acc
     record.write('Test Acc: %f\n'%acc)
     
+os.mkdir('checkpoint')     
 record=open('./checkpoint/'+args.id+'_test.txt','w')
 record.write('learning rate: %f\n'%args.lr)
 record.flush()
