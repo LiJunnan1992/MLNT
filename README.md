@@ -1,7 +1,7 @@
 # Meta-Learning based Noise-Tolerant Training
 
 This is the PyTorch code for CVPR 2019 Paper:\
-**Learning to Learn from Noisy Labeled Data**\
+**Learning to Learn from Noisy Labeled Data**\ <a href="https://arxiv.org/pdf/1812.05214.pdf">[pdf]</a>
 Junnan Li, Y. Wong, Qi Zhao, M. Kankanhalli \
 <i>To use the code, please cite our paper.</i>
 
