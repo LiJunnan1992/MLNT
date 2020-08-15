@@ -91,7 +91,7 @@ def train(epoch):
             _,feats = pretrain_net(inputs,get_feat=True)
             tch_outputs = tch_net(inputs,get_feat=False)
             p_tch = F.softmax(tch_outputs,dim=1)
-            p_tch.detach_()
+            p_tch = p_tch.detach()
             
             for i in range(args.num_fast):
                 targets_fast = targets.clone()
@@ -110,17 +110,23 @@ def train(epoch):
 
                 grads = torch.autograd.grad(fast_loss, net.parameters(), create_graph=True, retain_graph=True, only_inputs=True)
                 for grad in grads:
-                    grad.detach_()
+                    grad = grad.detach()
                     grad.requires_grad = False  
    
                 fast_weights = OrderedDict((name, param - args.meta_lr*grad) for ((name, param), grad) in zip(net.named_parameters(), grads))
                 
                 fast_out = net.forward(inputs,fast_weights)  
     
-                logp_fast = F.log_softmax(fast_out,dim=1)                
-                consistent_loss = consistent_criterion(logp_fast,p_tch)
-                consistent_loss = consistent_loss*alpha/args.num_fast 
-                consistent_loss.backward()
+                logp_fast = F.log_softmax(fast_out,dim=1)
+        
+                if i == 0:
+                    consistent_loss = consistent_criterion(logp_fast,p_tch)
+                else:
+                    consistent_loss = consistent_loss + consistent_criterion(logp_fast,p_tch)
+                
+        consistent_loss = consistent_loss*alpha/args.num_fast 
+            
+        consistent_loss.backward()
                 
         optimizer.step() # Optimizer update
 
