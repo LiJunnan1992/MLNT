@@ -124,9 +124,9 @@ def train(epoch):
                 else:
                     consistent_loss = consistent_loss + consistent_criterion(logp_fast,p_tch)
                 
-        consistent_loss = consistent_loss*alpha/args.num_fast 
+            meta_loss = consistent_loss*alpha/args.num_fast 
             
-        consistent_loss.backward()
+            meta_loss.backward()
                 
         optimizer.step() # Optimizer update
 
